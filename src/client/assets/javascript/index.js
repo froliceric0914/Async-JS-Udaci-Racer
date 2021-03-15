@@ -3,6 +3,11 @@
 // The store will hold all information needed globally
 //could be immutable
 
+/* to-do: 
+1.update the userPlayer function
+2. racer selector handler
+ */
+
 var store = {
     track_id: undefined,
     player_id: undefined,
@@ -100,7 +105,6 @@ async function handleCreateRace() {
 
         // TODO - call the async function startRace
         await startRace(store.race_id);
-        console.log('startRace(store.race_id)', startRace(store.race_id));
 
         // TODO - call the async function runRace
         await runRace(store.race_id);
@@ -110,7 +114,7 @@ async function handleCreateRace() {
     }
 }
 
-function runRace(raceID) {
+async function runRace(raceID) {
     return new Promise((resolve) => {
         // use Javascript's built in setInterval method to get race info every 500ms
         console.log('raceID', raceID);
@@ -164,7 +168,7 @@ function handleSelectPodRacer(target) {
     target.classList.add('selected');
 
     // save the selected racer to the store
-    store.player_id = target.id;
+    store.player_id = parseInt(target.id);
 }
 
 function handleSelectTrack(target) {
@@ -179,7 +183,7 @@ function handleSelectTrack(target) {
     // add class selected to current target
     target.classList.add('selected');
     // TODO - save the selected track id to the store
-    store.track_id = target.id;
+    store.track_id = parseInt(target.id);
 }
 
 function handleAccelerate() {
@@ -286,6 +290,7 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
+    console.log('position', positions);
     let userPlayer = positions.find((e) => e.id === store.player_id);
     console.log('userPlayer', userPlayer);
     userPlayer.driver_name += ' (you)';
@@ -370,7 +375,7 @@ async function createRace(player_id, track_id) {
     player_id = parseInt(player_id);
     track_id = parseInt(track_id);
     const body = { player_id, track_id };
-
+    console.log('body 378', body);
     return fetch(`${SERVER}/api/races`, {
         method: 'POST',
         body: JSON.stringify(body),
@@ -399,21 +404,21 @@ async function startRace(id) {
     const raceId = parseInt(id);
 
     try {
-        const data = await fetch(`${SERVER}/api/races/${raceId}/start`, {
+        await fetch(`${SERVER}/api/races/${raceId}/start`, {
             method: 'POST',
             ...defaultFetchOpts(),
         });
-        // return data;
     } catch (err) {
         console.log('Problem with getRace request::', err);
     }
 }
 
+//need to upda to work
 async function accelerate(id) {
     console.log('accelerate id', id);
     const raceId = parseInt(id);
     try {
-        const data = await fetch(`${SERVER}/api/races/${raceId}/accelerate`, {
+        await fetch(`${SERVER}/api/races/${raceId}/accelerate`, {
             method: 'POST',
             ...defaultFetchOpts(),
         });
