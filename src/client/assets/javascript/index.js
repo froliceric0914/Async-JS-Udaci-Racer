@@ -75,7 +75,6 @@ async function delay(ms) {
 
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
-    console.log('store', store);
     const { player_id, track_id } = store;
 
     if (!player_id || !track_id) {
@@ -145,8 +144,6 @@ async function runCountdown() {
 }
 
 function handleSelectPodRacer(target) {
-    console.log('selected a pod', target.id);
-
     // remove class selected from all racer options
     const selected = document.querySelector('#racers .selected');
     if (selected) {
@@ -156,13 +153,10 @@ function handleSelectPodRacer(target) {
     target.classList.add('selected');
 
     // save the selected racer to the store
-    console.log('parseInt(target.id)', parseInt(target.id));
     store.player_id = parseInt(target.id);
 }
 
 function handleSelectTrack(target) {
-    console.log('selected a track', target.id);
-
     // remove class selected from all track options
     const selected = document.querySelector('#tracks .selected');
     if (selected) {
@@ -339,7 +333,6 @@ async function getTracks() {
             method: 'GET',
             ...defaultFetchOpts(),
         });
-        console.log('getTracks data', data);
         return data.json();
     } catch (err) {
         console.log('getTracks error:: ', err);
@@ -352,7 +345,6 @@ async function getRacers() {
             method: 'GET',
             ...defaultFetchOpts(),
         });
-        console.log('getRacers data', data);
         return data.json();
     } catch (err) {
         console.log('getRacers error:: ', err);
@@ -361,8 +353,6 @@ async function getRacers() {
 
 async function createRace(player_id, track_id) {
     const body = { player_id, track_id };
-
-    console.log('body 385', body);
     try {
         const data = await fetch(`${SERVER}/api/races`, {
             method: 'POST',
